@@ -1,46 +1,47 @@
 import typer
 import logging
-from rich.logging import RichHandler
-from rich.console import Console
-import random
-from rich.progress import Progress
-from rich.progress import TimeElapsedColumn,SpinnerColumn
-import time
-
-FORMAT = "%(message)s"
-logging.basicConfig(
-    level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
-)
+import toml
+from .utility import download_release,get_repo_info
+import requests
+import sys
 
 log = logging.getLogger("rich")
+log.setLevel(logging.INFO)
 
 app = typer.Typer()
 
 @app.callback(invoke_without_command=True)
 def install():
-    console = Console(record=True)
+    base_url = "https://api.github.com"
     
-    with Progress(
-        SpinnerColumn(),
-        *Progress.get_default_columns(),
-        TimeElapsedColumn(),
-        transient=False,
-    ) as progress:
-        task1 = progress.add_task("[red]Downloading", total=100)
-        task2 = progress.add_task("[green]Processing", total=100)
-        # task3 = progress.add_task("[yellow]Thinking", total=None)
-        
-        log.debug("start")
+    try:
+        cfg_file = toml.load("./depend.toml")
+    except:
+        log.error("none depend.toml!")
+        sys.exit()
+
+    depend_lib = cfg_file["depend"]
+    
+    for lib_name in depend_lib:
+        log.debug(lib_name)
+        # 获取url
+        lib_url = depend_lib[lib_name]["url"]
+
+        lib_info =get_repo_info(lib_url)
+
+        owner = lib_info["owner"]
+        repo = lib_info["repo"]
+        tag = depend_lib[lib_name]["version"]
+        list_releases = base_url + f"/repos/{owner}/{repo}/releases/tags/{tag}"
+        log.debug(f"list_releases: {list_releases}")
+
+        ret = requests.get(list_releases)
         try:
-            while not progress.finished:
-                progress.update(task1, advance=0.5)
-                progress.update(task2, advance=0.3)
-                time.sleep(0.01)
-                if random.randint(0, 100) < 1:
-                    log.info("123")
-                    progress.log(123)
-        except:
-            log.info("end")
+            # print(ret.json()["zipball_url"])
+            release_url = ret.json()["zipball_url"]
+            download_release(release_url,repo)
+        except KeyError:
+            pass
     
 @app.command()
 def goodbye(name: str, formal: bool = False):

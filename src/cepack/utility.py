@@ -3,35 +3,16 @@ import sys
 import shutil
 from pathlib import Path
 import re
-import toml
 import requests
 import logging
-from logging.handlers import RotatingFileHandler
 # from git import Repo
 # from git.exc import GitCommandError
-from rich.logging import RichHandler
 from rich import print
-from rich import progress
 from rich.progress import Progress
 from rich.progress import TextColumn,TimeElapsedColumn,SpinnerColumn
-
-
-FORMAT = "%(message)s"
-logging.basicConfig(
-    level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
-)
+from zipfile import ZipFile
 
 log = logging.getLogger("rich")
-
-log_handle = RotatingFileHandler("build/lib/actions.log", mode="w", backupCount=5,encoding="utf-8")
-formatter = logging.Formatter("%(asctime)s - %(levelname)-8s - %(name)s - %(funcName)s - %(message)s ")
-log_handle.setFormatter(formatter)
-
-log.addHandler(log_handle)
-
-cfg_file = toml.load("./depend.toml")
-
-depend_lib = cfg_file["depend"]
 
 def download_release(url,name,path=None):
     """下载release包到指定路径
@@ -41,9 +22,14 @@ def download_release(url,name,path=None):
         name (str): 名称
         path (_type_, optional): 存放路径. Defaults to None.
     """
+    download_path = Path(f"lib/{name}.zip")
+    log.debug("download pack path: "+str(download_path))
+    target_path = Path(f"lib/")
     headers = {'Accept-Encoding': 'identity'}
     ret = requests.get(url,stream=True,headers=headers)
     log.debug(ret.headers)
+    
+    log.info(f"download pack [red]{name}...")
 
     with Progress(
         TextColumn("[progress.description]{task.description}"),
@@ -52,16 +38,27 @@ def download_release(url,name,path=None):
     ) as progress:
         task1 = progress.add_task(f"[Download {name}..]")
         
-        with open(f'build/lib/{name}.zip','wb') as fd:
+        with download_path.open('wb') as fd:
             for data in ret.iter_content(chunk_size=128):
                 fd.write(data)
                 # fd.flush()
 
-        log.debug("start unzip...")
-        shutil.unpack_archive(f"build/lib/{name}.zip",f"build/lib/{name}", 'zip')
-        log.debug("end unzip...")
-
-    os.remove(f"build/lib/{name}.zip")  
+        log.debug(f"start decompressing {name}...")
+        shutil.unpack_archive(download_path,target_path ,format='zip')
+        log.debug(f"complete decompressing {name}...")
+        
+    # 重命名文件夹
+    with ZipFile(download_path,'r') as zip_ref:
+        log.debug("zip file name: " + zip_ref.namelist()[0])
+        filenameDir_path = Path(f"lib/",zip_ref.namelist()[0])
+        log.debug(filenameDir_path)
+    try:
+        os.rename(filenameDir_path,f"lib/{name}")
+    except FileExistsError:
+        shutil.rmtree(f"lib/{name}")
+        os.rename(filenameDir_path,f"lib/{name}")
+    # 删除包
+    os.remove(download_path)
 
         
 
