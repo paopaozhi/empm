@@ -5,8 +5,7 @@ from pathlib import Path
 import re
 import requests
 import logging
-# from git import Repo
-# from git.exc import GitCommandError
+import subprocess
 from rich import print
 from rich.progress import Progress
 from rich.progress import TextColumn,TimeElapsedColumn,SpinnerColumn
@@ -75,15 +74,17 @@ def download_repo(url:str,name:str,path=None):
         SpinnerColumn(),
         TimeElapsedColumn(),
     ) as progress:
-        task1 = progress.add_task(f"Download {name}...", total=len(depend_lib))
+        task1 = progress.add_task(f"Download {name}...")
 
-        download_path = Path(f"build/lib/{name}")  
-        # os.path.join('build','lib',name)
-        try:
-            Repo.clone_from(url,to_path=download_path)
-        except GitCommandError:
-            pass
-        progress.update(task1,advance=1)
+        download_path = Path(f"lib/{name}")
+        log.debug(download_path)
+        
+        result = subprocess.run(["git","clone",url,download_path],shell=True,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+        if result.stdout != b'':
+            log.info(result.stdout.decode('utf-8'))
+        
+        if result.stderr != b'':
+            log.error(result.stderr.decode('utf-8'))
 
 def get_repo_info(url) -> dict:
     a = re.findall("/\w+",url)
