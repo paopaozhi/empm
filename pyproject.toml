@@ -21,5 +21,5 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project.urls]
-"Homepage" = "https://github.com/pypa/sampleproject"
-"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+"Homepage" = "https://github.com/paopaozhi/cepack"
+"Bug Tracker" = "https://github.com/paopaozhi/cepack/issues"
