@@ -97,28 +97,3 @@ def get_repo_info(url) -> dict:
     }
     log.debug(f"info:{c}")
     return c
-
-if __name__ == "__main__":
-    base_url = "https://api.github.com"
-
-    for lib_name in depend_lib:
-        log.debug(lib_name)
-        # 获取url
-        lib_url = depend_lib[lib_name]["url"]
-
-        lib_info =get_repo_info(lib_url)
-
-        owner = lib_info["owner"]
-        repo = lib_info["repo"]
-        tag = depend_lib[lib_name]["version"]
-        list_releases = base_url + f"/repos/{owner}/{repo}/releases/tags/{tag}"
-        log.debug(f"list_releases: {list_releases}")
-
-        ret = requests.get(list_releases)
-        log.debug(ret.json())
-        try:
-            print(ret.json()["zipball_url"])
-            release_url = ret.json()["zipball_url"]
-            download_release(release_url,repo)
-        except KeyError:
-            download_repo(lib_url,repo)
