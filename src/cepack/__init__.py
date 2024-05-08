@@ -7,3 +7,4 @@ logging.basicConfig(
 )
 
 log = logging.getLogger("rich")
+log.setLevel(logging.INFO)

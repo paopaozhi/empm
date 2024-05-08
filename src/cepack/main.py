@@ -1,16 +1,16 @@
 import typer
 import logging
 import toml
-from .utility import download_release,get_repo_info
+from .utility import download_repo,download_release,get_repo_info
 import requests
 import sys
+from pathlib import Path
 
 log = logging.getLogger("rich")
-log.setLevel(logging.INFO)
 
 app = typer.Typer()
 
-@app.callback(invoke_without_command=True)
+@app.command()
 def install():
     base_url = "https://api.github.com"
     
@@ -23,6 +23,10 @@ def install():
     depend_lib = cfg_file["depend"]
     
     for lib_name in depend_lib:
+        if Path(f"lib/{lib_name}").exists():
+            log.info(f"{lib_name}: {depend_lib[lib_name]}")
+            continue
+        
         log.debug(lib_name)
         # 获取url
         lib_url = depend_lib[lib_name]["url"]
@@ -41,7 +45,7 @@ def install():
             release_url = ret.json()["zipball_url"]
             download_release(release_url,repo)
         except KeyError:
-            pass
+            download_repo(lib_url,repo)
     
 @app.command()
 def goodbye(name: str, formal: bool = False):

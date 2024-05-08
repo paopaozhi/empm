@@ -1,6 +1,6 @@
 [project]
 name = "cepack"
-version = "0.0.1"
+version = "0.0.2"
 authors = [{ name = "paopaozhi", email = "paopaozhi@hotmail.com" }]
 dependencies = ["typer","toml","requests"]
 description = "embedded pack manage"
