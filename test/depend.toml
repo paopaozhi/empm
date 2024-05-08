@@ -1,4 +1,0 @@
-[depend]
-gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
-# lvgl = { url = "https://github.com/lvgl/lvgl", version = "v9.0.0" }
-# ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
