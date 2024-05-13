@@ -26,3 +26,9 @@ class TestUtility(unittest.TestCase):
 
         ret = os.path.isdir(lib_path)
         self.assertEqual(True, ret)
+        
+    def test_get_depend(slef):
+        pass
+    
+    def test_set_depend(self):
+        pass

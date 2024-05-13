@@ -103,13 +103,28 @@ def get_repo_info(url) -> dict:
     return c
 
 
-class toml_depend:
+class TomlDepend:
     def __init__(self) -> None:
         try:
-            self.cfg_file = toml.load("./depend.toml")
+            self._cfg_file = toml.load("depend.toml")
         except:
             log.error("none depend.toml!")
             sys.exit()
 
     def get_depend(self):
-        depend_lib = self.cfg_file["depend"]
+        return self._cfg_file.get("depend", {})
+
+    def set_depend(self, name: str, url: str, version=None):
+        log.info(f"Wire {name} to depend.toml")
+        depend_lib = self.get_depend()
+        if version is None:
+            depend_lib[name] = {"url": url}
+        else:
+            depend_lib[name] = {"url": url, "version": version}
+
+        self._cfg_file["depend"] = depend_lib
+        log.debug(f"{name}: {self._cfg_file['depend'][name]}")
+
+        with open(Path("depend.toml"), "w+") as fd:
+            d = toml.dump(self._cfg_file, fd)
+            log.debug(d)
