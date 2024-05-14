@@ -1,6 +1,6 @@
 [project]
 name = "cepack"
-version = "0.0.2"
+version = "0.0.3"
 authors = [{ name = "paopaozhi", email = "paopaozhi@hotmail.com" }]
 dependencies = ["typer","toml","requests"]
 description = "embedded pack manage"
@@ -23,3 +23,7 @@ build-backend = "setuptools.build_meta"
 [project.urls]
 "Homepage" = "https://github.com/paopaozhi/cepack"
 "Bug Tracker" = "https://github.com/paopaozhi/cepack/issues"
+
+[tool.setuptools]
+# ...
+package-dir = {"" = "."}
