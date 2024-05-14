@@ -12,3 +12,6 @@ formatter = logging.Formatter(
 log_handle.setFormatter(formatter)
 
 log.addHandler(log_handle)
+
+import os
+os.makedirs('lib', exist_ok=True)
