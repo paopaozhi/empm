@@ -3,6 +3,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cepack)
 ![PyPI - Version](https://img.shields.io/pypi/v/cepack)
 ![PyPI - License](https://img.shields.io/pypi/l/cepack)
+![Codecov](https://img.shields.io/codecov/c/github/paopaozhi/cepack)
 
 嵌入式包管理器
 
