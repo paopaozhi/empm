@@ -1,10 +1,8 @@
 # cepack
 
-<img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/cepack">
-
-<img alt="PyPI - Version" src="https://img.shields.io/pypi/v/cepack">
-
-<img alt="PyPI - License" src="https://img.shields.io/pypi/l/cepack">
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cepack)
+![PyPI - Version](https://img.shields.io/pypi/v/cepack)
+![PyPI - License](https://img.shields.io/pypi/l/cepack)
 
 嵌入式包管理器
 
