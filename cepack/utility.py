@@ -59,6 +59,8 @@ def download_release(url, name, path=None):
     except FileExistsError:
         shutil.rmtree(f"lib/{name}")
         os.rename(filenameDir_path, f"lib/{name}")
+    except PermissionError:
+        log.error("无法更名！")
     # 删除包
     os.remove(download_path)
 

@@ -44,6 +44,7 @@ class TestCi(unittest.TestCase):
         with open("depend.toml", "w") as fd:
             fd.write("# Test command install")
             fd.flush()
+        with open("depend.toml", "w") as fd:
             if cfg_class:
                 toml.dump(cfg_class, fd)
 
