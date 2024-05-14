@@ -55,10 +55,12 @@ def download_release(url, name, path=None):
         filenameDir_path = Path(f"lib/", zip_ref.namelist()[0])
         log.debug(filenameDir_path)
     try:
-        os.rename(filenameDir_path, f"lib/{name}")
+        shutil.move(filenameDir_path, f"lib/{name}")
     except FileExistsError:
         shutil.rmtree(f"lib/{name}")
-        os.rename(filenameDir_path, f"lib/{name}")
+        shutil.move(filenameDir_path, f"lib/{name}")
+    except PermissionError as e:
+        log.error(f"权限错误：{e}")
     # 删除包
     os.remove(download_path)
 

@@ -20,11 +20,6 @@ class TestCi(unittest.TestCase):
     def test_ci_install(self):
 
         cfg = """
-        [package]
-        name = "cepack_test"
-        version = "0.0.2"
-        authors = ["泡泡纸 <paopaozhi@hotmail.com>"]
-        
         [depend]
         gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
         ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
@@ -44,6 +39,7 @@ class TestCi(unittest.TestCase):
         with open("depend.toml", "w") as fd:
             fd.write("# Test command install")
             fd.flush()
+        with open("depend.toml", "w") as fd:
             if cfg_class:
                 toml.dump(cfg_class, fd)
 
