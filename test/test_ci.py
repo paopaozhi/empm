@@ -16,6 +16,7 @@ runner = CliRunner()
 
 
 class TestCi(unittest.TestCase):
+    @env_manage.auto_clear_env
     def test_ci_install(self):
 
         cfg = """
@@ -31,7 +32,20 @@ class TestCi(unittest.TestCase):
         [dependencies]
         gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
         ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
-        """.replace(" ", "")
+        """.replace(
+            " ", ""
+        )
+
+        cfg_class = {}
+        cfg_class = toml.loads(cfg)
+        
+        log.debug(f"cfg_class: {cfg_class}")
+
+        with open("depend.toml", "w") as fd:
+            fd.write("# Test command install")
+            fd.flush()
+            if cfg_class:
+                toml.dump(cfg_class, fd)
 
         # clean env, delete file
         lib_path = Path("lib")
@@ -75,11 +89,19 @@ class TestCi(unittest.TestCase):
             fd.write("# Test command add")
 
         log.info("Test command add")
-        result = runner.invoke(app, ["add", "--pack-type", "--pack-version", "v3.14.0", "gitmoji",
-                                     "https://github.com/carloscuesta/gitmoji"])
+        result = runner.invoke(
+            app,
+            [
+                "add",
+                "--pack-type",
+                "--pack-version",
+                "v3.14.0",
+                "gitmoji",
+                "https://github.com/carloscuesta/gitmoji",
+            ],
+        )
         # assert result.exit_code != 0
-        result = runner.invoke(app, ["add", "ulog",
-                                     "https://github.com/rdpoor/ulog"])
+        result = runner.invoke(app, ["add", "ulog", "https://github.com/rdpoor/ulog"])
 
         cfg = toml.load("depend.toml")
         log.info("test ulog")
