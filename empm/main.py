@@ -3,6 +3,7 @@ from typing_extensions import Annotated
 import typer
 import logging
 import toml
+import uvicorn
 from .utility import download_repo, download_release, get_repo_info, delete_pack
 import requests
 import sys
@@ -10,6 +11,7 @@ from pathlib import Path
 import shutil
 
 from .utility import TomlDepend
+from web.main import web_app
 
 log = logging.getLogger("rich")
 
@@ -111,6 +113,17 @@ def remove(pack_name: str):
             delete_pack(pack_path)
     else:
         log.error("not pack!")
+
+
+@app.command()
+def home():
+    try:
+        uvicorn.run(web_app, port=5000, log_level="info")
+    except KeyboardInterrupt:
+        log.info("exit")
+        sys.exit()
+    except Exception as e:
+        log.error(f"error: {e}")
 
 
 def run():

@@ -149,3 +149,7 @@ class TestCi(unittest.TestCase):
         self.assertEqual(False,ret)
         cfg = toml.load("depend.toml")
         self.assertNotIn("ulog", cfg["depend"])
+    
+    @env_manage.auto_clear_env
+    def test_ci_remove(self):
+        result = runner.invoke(app, ["home"])
