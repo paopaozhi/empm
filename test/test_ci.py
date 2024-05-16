@@ -136,14 +136,16 @@ class TestCi(unittest.TestCase):
         with open("depend.toml", "w") as fd:
             if cfg_class:
                 toml.dump(cfg_class, fd)
-            
-        result = runner.invoke(app, ["install"])
         
-        assert result.exit_code == 0
+        # 创建测试文件
+        pack1_path = Path("lib/ulog")
+        os.makedirs(pack1_path, exist_ok=True)
         
         result = runner.invoke(app, ["remove", "ulog"])
         
-        ret = Path('lib\ulog').is_dir()
+        assert result.exit_code == 0
+        
+        ret = pack1_path.exists()
         self.assertEqual(False,ret)
         cfg = toml.load("depend.toml")
         self.assertNotIn("ulog", cfg["depend"])
