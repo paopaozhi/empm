@@ -1,6 +1,6 @@
 [project]
-name = "cepack"
-version = "0.0.6"
+name = "empm"
+version = "0.0.7"
 authors = [{ name = "paopaozhi", email = "paopaozhi@hotmail.com" }]
 dependencies = ["typer","toml","requests"]
 description = "embedded pack manage"
@@ -13,7 +13,7 @@ classifiers = [
 ]
 
 [project.scripts]
-cepack = "cepack.main:run"
+cepack = "empm.main:run"
 
 [build-system]
 # requires = ["setuptools>=61.0"]

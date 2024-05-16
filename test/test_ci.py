@@ -8,7 +8,7 @@ import unittest
 import toml
 from typer.testing import CliRunner
 
-from cepack.main import app
+from empm.main import app
 from test.utility import env_manage
 from test import log
 

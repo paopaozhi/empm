@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import unittest
 
-from cepack.utility import download_repo
+from empm.utility import download_repo
 
 
 class TestUtility(unittest.TestCase):
