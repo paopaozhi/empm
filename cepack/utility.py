@@ -105,6 +105,22 @@ def get_repo_info(url) -> dict:
     return c
 
 
+def delete_pack(path: Path):
+    if os.name == "nt":
+        result = subprocess.run(
+            ["rmdir", "/S", "/Q", path],
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if result.stdout != b"":
+            log.info(result.stdout.decode("GBK"))
+        if result.stderr != b"":
+            log.error(result.stderr.decode("GBK"))
+    elif os.name == "posix":
+        shutil.rmtree(path)
+
+
 class TomlDepend:
     def __init__(self) -> None:
         try:
@@ -113,7 +129,7 @@ class TomlDepend:
             log.error("none depend.toml!")
             sys.exit()
 
-    def get_depend(self):
+    def get_depend(self) -> dict:
         return self._cfg_file.get("depend", {})
 
     def set_depend(self, name: str, url: str, version=None):
@@ -127,6 +143,13 @@ class TomlDepend:
         self._cfg_file["depend"] = depend_lib
         log.debug(f"{name}: {self._cfg_file['depend'][name]}")
 
+        with open(Path("depend.toml"), "w+") as fd:
+            d = toml.dump(self._cfg_file, fd)
+            log.debug(d)
+            
+    def delete_depend(self,name:str):
+        log.debug(f"Delete {name} from toml")
+        self.get_depend().pop(name)
         with open(Path("depend.toml"), "w+") as fd:
             d = toml.dump(self._cfg_file, fd)
             log.debug(d)

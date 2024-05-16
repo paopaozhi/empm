@@ -3,10 +3,11 @@ from typing_extensions import Annotated
 import typer
 import logging
 import toml
-from .utility import download_repo, download_release, get_repo_info
+from .utility import download_repo, download_release, get_repo_info, delete_pack
 import requests
 import sys
 from pathlib import Path
+import shutil
 
 from .utility import TomlDepend
 
@@ -55,10 +56,12 @@ def install():
 
 @app.command()
 def add(
-        pack_name: str,
-        pack_url: str,
-        pack_type: Annotated[bool, typer.Option(help="True: download release False: download repo")] = False,
-        pack_version: Annotated[str, typer.Option(help="pack version")] = None,
+    pack_name: str,
+    pack_url: str,
+    pack_type: Annotated[
+        bool, typer.Option(help="True: download release False: download repo")
+    ] = False,
+    pack_version: Annotated[str, typer.Option(help="pack version")] = None,
 ):
     if pack_type:
         if pack_version is None:
@@ -87,7 +90,7 @@ def add(
         log.debug(f"list_releases: {list_releases}")
 
         ret = requests.get(list_releases)
-        
+
         release_url = ret.json()["zipball_url"]
         download_release(release_url, pack_name)
     else:
@@ -95,8 +98,19 @@ def add(
 
 
 @app.command()
-def init():
-    print("default")
+def remove(pack_name: str):
+    log.debug("run command 'remove'...")
+    log.info(f"remove {pack_name}")
+    pack_path = Path(f"lib/{pack_name}")
+    pack_toml = TomlDepend()
+
+    if pack_name in pack_toml.get_depend():
+        pack_toml.delete_depend(pack_name)
+        if pack_path.exists():
+            log.debug(f"delete {pack_name}")
+            delete_pack(pack_path)
+    else:
+        log.error("not pack!")
 
 
 def run():
