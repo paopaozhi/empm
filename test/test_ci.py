@@ -112,3 +112,38 @@ class TestCi(unittest.TestCase):
 
         self.assertEqual(True, ret1)
         self.assertEqual(True, ret2)
+    
+    @env_manage.auto_clear_env
+    def test_ci_remove(self):
+        cfg = """
+        [depend]
+        gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
+        ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
+        
+        [dependencies]
+        gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
+        ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
+        """.replace(
+            " ", ""
+        )
+        
+        cfg_class = {}
+        cfg_class = toml.loads(cfg)
+        
+        with open("depend.toml", "w") as fd:
+            fd.write("# Test command remove")
+            fd.flush()
+        with open("depend.toml", "w") as fd:
+            if cfg_class:
+                toml.dump(cfg_class, fd)
+            
+        result = runner.invoke(app, ["install"])
+        
+        assert result.exit_code == 0
+        
+        result = runner.invoke(app, ["remove", "ulog"])
+        
+        ret = Path('lib\ulog').is_dir()
+        self.assertEqual(False,ret)
+        cfg = toml.load("depend.toml")
+        self.assertNotIn("ulog", cfg["depend"])
