@@ -1,6 +1,8 @@
 import logging
+import os
 from logging.handlers import RotatingFileHandler
-import empm
+
+import empm  # noqa: F401
 
 log = logging.getLogger("rich")
 log.setLevel(logging.DEBUG)
@@ -13,5 +15,5 @@ log_handle.setFormatter(formatter)
 
 log.addHandler(log_handle)
 
-import os
-os.makedirs('lib', exist_ok=True)
+
+os.makedirs("lib", exist_ok=True)

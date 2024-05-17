@@ -1,8 +1,6 @@
-import sys
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-import uvicorn
 from pathlib import Path
 import os
 

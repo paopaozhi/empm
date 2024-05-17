@@ -1,17 +1,15 @@
-import os
-import sys
-import shutil
-from pathlib import Path
-import re
-import requests
 import logging
+import os
+import re
+import shutil
 import subprocess
-from rich import print
-from rich.progress import Progress
-from rich.progress import TextColumn, TimeElapsedColumn, SpinnerColumn
+import sys
+from pathlib import Path
 from zipfile import ZipFile
 
+import requests
 import toml
+from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 
 log = logging.getLogger("rich")
 
@@ -26,7 +24,7 @@ def download_release(url, name, path=None):
     """
     download_path = Path(f"lib/{name}.zip")
     log.debug("download pack path: " + str(download_path))
-    target_path = Path(f"lib/")
+    target_path = Path("lib/")
     headers = {"Accept-Encoding": "identity"}
     ret = requests.get(url, stream=True, headers=headers)
     log.debug(ret.headers)
@@ -38,7 +36,7 @@ def download_release(url, name, path=None):
         SpinnerColumn(),
         TimeElapsedColumn(),
     ) as progress:
-        task1 = progress.add_task(f"[Download {name}..]")
+        progress.add_task(f"[Download {name}..]")
 
         with download_path.open("wb") as fd:
             for data in ret.iter_content(chunk_size=128):
@@ -52,7 +50,7 @@ def download_release(url, name, path=None):
     # 重命名文件夹
     with ZipFile(download_path, "r") as zip_ref:
         log.debug("zip file name: " + zip_ref.namelist()[0])
-        filenameDir_path = Path(f"lib/", zip_ref.namelist()[0])
+        filenameDir_path = Path("lib/", zip_ref.namelist()[0])
         log.debug(filenameDir_path)
     try:
         shutil.move(filenameDir_path, f"lib/{name}")
@@ -78,7 +76,7 @@ def download_repo(url: str, name: str, path=None):
         SpinnerColumn(),
         TimeElapsedColumn(),
     ) as progress:
-        task1 = progress.add_task(f"Download {name}...")
+        progress.add_task(f"Download {name}...")
 
         download_path = Path(f"lib/{name}")
         log.debug(download_path)
@@ -125,7 +123,7 @@ class TomlDepend:
     def __init__(self) -> None:
         try:
             self._cfg_file = toml.load("depend.toml")
-        except:
+        except Exception:
             log.error("none depend.toml!")
             sys.exit()
 
@@ -146,8 +144,8 @@ class TomlDepend:
         with open(Path("depend.toml"), "w+") as fd:
             d = toml.dump(self._cfg_file, fd)
             log.debug(d)
-            
-    def delete_depend(self,name:str):
+
+    def delete_depend(self, name: str):
         log.debug(f"Delete {name} from toml")
         self.get_depend().pop(name)
         with open(Path("depend.toml"), "w+") as fd:
