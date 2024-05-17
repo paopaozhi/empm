@@ -3,7 +3,7 @@ name = "empm"
 version = "0.0.7"
 authors = [
   { name = "paopaozhi", email = "paopaozhi@hotmail.com" },
-  { name = "hppm", email = "hexinyi136@139.com" },
+  { name = "hymn", email = "hexinyi136@139.com" },
 ]
 dependencies = ["typer", "toml", "requests", "fastapi"]
 description = "embedded pack manage"

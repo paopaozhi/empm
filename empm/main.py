@@ -1,17 +1,22 @@
-from typing_extensions import Annotated
-
-import typer
 import logging
-import toml
-import uvicorn
-from .utility import download_repo, download_release, get_repo_info, delete_pack
-import requests
 import sys
 from pathlib import Path
-import shutil
 
-from .utility import TomlDepend
+import requests
+import toml
+import typer
+import uvicorn
+from typing_extensions import Annotated
+
 from web.main import web_app
+
+from .utility import (
+    TomlDepend,
+    delete_pack,
+    download_release,
+    download_repo,
+    get_repo_info,
+)
 
 log = logging.getLogger("rich")
 
@@ -24,7 +29,7 @@ def install():
 
     try:
         cfg_file = toml.load("./depend.toml")
-    except:
+    except Exception:
         log.error("none depend.toml!")
         sys.exit()
 
