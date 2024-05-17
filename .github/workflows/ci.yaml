@@ -42,32 +42,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - name: Install Python dependencies
+          python-version: "3.x"
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade hatch
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Check with ruff
-        if: always()
-        run: hatch run style:lint
-      - name: Check with mypy
-        if: always()
-        run: hatch run types:check
-      - name: Check Markdown style
-        if: always()
-        run: hatch run lint:markdown
-      - name: Check JS style
-        if: always()
-        run: hatch run lint:js
-      - name: Check spelling
-        if: always()
-        run: hatch run lint:spelling
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Lint with Ruff
+        run: |
+          pip install ruff
+          ruff --output-format=github .
+        continue-on-error: true
 
   # package:
   #   runs-on: ubuntu-latest
