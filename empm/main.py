@@ -124,11 +124,3 @@ def home():
         sys.exit()
     except Exception as e:
         log.error(f"error: {e}")
-
-
-def run():
-    app()
-
-
-if __name__ == "__main__":
-    run()

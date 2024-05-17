@@ -25,13 +25,3 @@ async def get_static_files_or_404(whatever):
     if os.path.isfile(file_path):
         return FileResponse(file_path)
     return FileResponse(html_path)
-
-
-if __name__ == "__main__":
-    try:
-        uvicorn.run(web_app, port=5000, log_level="info")
-    except KeyboardInterrupt:
-        print("exit")
-        sys.exit()
-    except Exception as e:
-        print(f"error: {e}")

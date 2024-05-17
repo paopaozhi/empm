@@ -1,8 +1,11 @@
 [project]
 name = "empm"
 version = "0.0.7"
-authors = [{ name = "paopaozhi", email = "paopaozhi@hotmail.com" }]
-dependencies = ["typer","toml","requests","fastapi"]
+authors = [
+  { name = "paopaozhi", email = "paopaozhi@hotmail.com" },
+  { name = "hppm", email = "hexinyi136@139.com" },
+]
+dependencies = ["typer", "toml", "requests", "fastapi"]
 description = "embedded pack manage"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -26,4 +29,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 # ...
-package-dir = {"" = "."}
+package-dir = { "" = "." }
+
+[tool.coverage.run]
+branch = true
+omit = ["test/*"]

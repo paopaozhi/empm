@@ -33,7 +33,7 @@ class TestCi(unittest.TestCase):
 
         cfg_class = {}
         cfg_class = toml.loads(cfg)
-        
+
         log.debug(f"cfg_class: {cfg_class}")
 
         with open("depend.toml", "w") as fd:
@@ -112,7 +112,7 @@ class TestCi(unittest.TestCase):
 
         self.assertEqual(True, ret1)
         self.assertEqual(True, ret2)
-    
+
     @env_manage.auto_clear_env
     def test_ci_remove(self):
         cfg = """
@@ -126,30 +126,30 @@ class TestCi(unittest.TestCase):
         """.replace(
             " ", ""
         )
-        
+
         cfg_class = {}
         cfg_class = toml.loads(cfg)
-        
+
         with open("depend.toml", "w") as fd:
             fd.write("# Test command remove")
             fd.flush()
         with open("depend.toml", "w") as fd:
             if cfg_class:
                 toml.dump(cfg_class, fd)
-        
+
         # 创建测试文件
         pack1_path = Path("lib/ulog")
         os.makedirs(pack1_path, exist_ok=True)
-        
+
         result = runner.invoke(app, ["remove", "ulog"])
-        
+
         assert result.exit_code == 0
-        
+
         ret = pack1_path.exists()
-        self.assertEqual(False,ret)
+        self.assertEqual(False, ret)
         cfg = toml.load("depend.toml")
         self.assertNotIn("ulog", cfg["depend"])
-    
+
     @env_manage.auto_clear_env
     def test_ci_remove(self):
         result = runner.invoke(app, ["home"])
