@@ -28,7 +28,8 @@ jobs:
           node-version: "20.x"
       - name: Build React
         run: |
-          cd web/html && yarn build
+          cd web/html && yarn
+          yarn build
       - name: Run tests
         run: |
           pytest --cov=. --cov-report xml
