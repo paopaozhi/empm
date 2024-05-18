@@ -3,6 +3,7 @@ import shutil
 import subprocess
 import unittest
 from pathlib import Path
+import sys
 
 from empm.utility import download_repo
 
