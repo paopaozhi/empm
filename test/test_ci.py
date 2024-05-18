@@ -15,6 +15,14 @@ runner = CliRunner()
 
 
 class TestCi(unittest.TestCase):
+    def test_ci_main(self):
+        result = subprocess.run(
+            ["python", "-m", "empm", "--help"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        result.check_returncode()
+
     @env_manage.auto_clear_env
     def test_ci_install(self):
         cfg = """
@@ -76,6 +84,11 @@ class TestCi(unittest.TestCase):
         log.info("TestCi End")
 
     @env_manage.auto_clear_env
+    def test_ci_install_load_toml(self):
+        result = runner.invoke(app, ["install"])
+        assert result.exit_code != 0
+
+    @env_manage.auto_clear_env
     def test_ci_add(self):
         with open("depend.toml", "w") as fd:
             fd.write("# Test command add")
@@ -108,6 +121,11 @@ class TestCi(unittest.TestCase):
 
         self.assertEqual(True, ret1)
         self.assertEqual(True, ret2)
+
+        result = runner.invoke(
+            app, ["add", "ulog", "--pack-type", "https://github.com/rdpoor/ulog"]
+        )
+        assert result.exit_code != 0
 
     @env_manage.auto_clear_env
     def test_ci_remove(self):
@@ -144,7 +162,12 @@ class TestCi(unittest.TestCase):
         cfg = toml.load("depend.toml")
         self.assertNotIn("ulog", cfg["depend"])
 
+        result = runner.invoke(app, ["remove", "not-ulog"])
+        assert result.exit_code != 0
+
     @env_manage.auto_clear_env
     def test_ci_home(self):
         pass
-        # result = runner.invoke(app, ["home"])
+        # with pytest.raises(KeyboardInterrupt):
+        #     result = runner.invoke(app, ["home"])
+        #     assert result.exit_code != 0

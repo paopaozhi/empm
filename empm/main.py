@@ -31,7 +31,7 @@ def install():
         cfg_file = toml.load("./depend.toml")
     except Exception:
         log.error("none depend.toml!")
-        sys.exit()
+        sys.exit(1)
 
     depend_lib = cfg_file["depend"]
 
@@ -73,7 +73,7 @@ def add(
     if pack_type:
         if pack_version is None:
             log.error("Unspecified release version!")
-            sys.exit()
+            sys.exit(1)
 
     toml_depend = TomlDepend()
     log.info("write toml file...")
@@ -118,6 +118,7 @@ def remove(pack_name: str):
             delete_pack(pack_path)
     else:
         log.error("not pack!")
+        sys.exit(1)
 
 
 @app.command()
@@ -126,6 +127,6 @@ def home():
         uvicorn.run(web_app, port=5000, log_level="info")
     except KeyboardInterrupt:
         log.info("exit")
-        sys.exit()
+        sys.exit(1)
     except Exception as e:
         log.error(f"error: {e}")

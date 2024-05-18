@@ -1,8 +1,8 @@
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import unittest
+from pathlib import Path
 
 from empm.utility import download_repo
 
@@ -25,9 +25,19 @@ class TestUtility(unittest.TestCase):
 
         ret = os.path.isdir(lib_path)
         self.assertEqual(True, ret)
-        
+
     def test_get_depend(slef):
         pass
-    
+
     def test_set_depend(self):
         pass
+
+    def test_delete_pack(self):
+        from empm.utility import delete_pack
+
+        pack_path = Path("lib/ulogs")
+
+        os.makedirs("lib/ulogs", exist_ok=True)
+        delete_pack(pack_path)
+
+        assert Path("lib/ulogs").exists() is False
