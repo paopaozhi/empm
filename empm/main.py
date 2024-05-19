@@ -130,3 +130,7 @@ def home():
         sys.exit(1)
     except Exception as e:
         log.error(f"error: {e}")
+
+
+def run():
+    app()
