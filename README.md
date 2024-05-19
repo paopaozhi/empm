@@ -3,7 +3,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/empm?logo=python)
 ![PyPI - Version](https://img.shields.io/pypi/v/empm?logo=pypi)
 ![Codecov](https://img.shields.io/codecov/c/github/paopaozhi/empm?logo=codecov)
-![PyPI - License](https://img.shields.io/pypi/l/empm?logo=gnu)
+![PyPI - License](https://img.shields.io/pypi/l/empm?logo=apache)
 
 嵌入式包管理器
 
