@@ -14,23 +14,54 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 log = logging.getLogger("rich")
 
 
-def download_release(url, name, path=None):
+def download_release(url, name, version, path=None):
     """下载release包到指定路径
 
     Args:
-        url (str): release包链接
+        url (str): release包仓库链接
         name (str): 名称
         path (_type_, optional): 存放路径. Defaults to None.
+
+    Raises:
+        FileExistsError: If the destination folder already exists.
+        PermissionError: If there is a permission error while moving the folder.
+
+    Returns:
+        None
+
     """
-    download_path = Path(f"lib/{name}.zip")
+    if path is None:
+        path = Path("lib/")
+    else:
+        path = Path(path)
+
+    download_path = Path(path, f"{name}.zip")
     log.debug("download pack path: " + str(download_path))
+
     target_path = Path("lib/")
+
+    if Path(f"lib/{name}").exists():
+        log.info(f"{name}: pack already exists")
+
+    log.debug(name)
+    # 获取url
+    pack_info = get_repo_info(url)
+    owner = pack_info["owner"]
+    repo = pack_info["repo"]
+    tag = version
+
+    base_url = "https://api.github.com"
+    get_releases_url = base_url + f"/repos/{owner}/{repo}/releases/tags/{tag}"
+    log.debug(f"releases url: {get_releases_url}")
+
+    ret = requests.get(get_releases_url)
+    release_url = ret.json()["zipball_url"]
+    log.debug(f"release_download_url: {release_url}")
+
     headers = {"Accept-Encoding": "identity"}
-    ret = requests.get(url, stream=True, headers=headers)
-    log.debug(ret.headers)
+    ret = requests.get(release_url, stream=True, headers=headers)
 
-    log.info(f"download pack [red]{name}...")
-
+    log.info(f"download pack {name}...")
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         SpinnerColumn(),
@@ -70,6 +101,9 @@ def download_repo(url: str, name: str, path=None):
         url (str): 远程仓库链接
         name (str): 仓库名称
         path (_type_, optional): 存放路径. Defaults to None.
+
+    Returns:
+        None
     """
     with Progress(
         TextColumn("[progress.description]{task.description}"),
@@ -94,7 +128,15 @@ def download_repo(url: str, name: str, path=None):
             log.error(result.stderr.decode("utf-8"))
 
 
-def get_repo_info(url) -> dict:
+def get_repo_info(url: str) -> dict:
+    """Get repository information from a given URL.
+
+    Args:
+        url (str): The URL of the repository.
+
+    Returns:
+        dict: A dictionary containing the owner, repo, and remote information of the repository.
+    """
     a = re.findall("/\w+", url)
     log.debug(f"findall_url:{a}")
     b = [i[1:] for i in a]
@@ -117,6 +159,77 @@ def delete_pack(path: Path):
             log.error(result.stderr.decode("GBK"))
     elif os.name == "posix":
         shutil.rmtree(path)
+
+
+class Pack:
+    def __init__(self, name, url, version=None, path=None) -> None:
+        self.name = name
+        self.url = url
+        self.version = version
+        if self.path is None:
+            self.path = Path("lib/")
+        else:
+            self.path = path
+
+    def __download(self, pack_type="repo"):
+        if pack_type == "repo":
+            download_repo(self.url, self.name, self.path)
+        elif pack_type == "release":
+            download_release(self.url, self.name, self.version, self.path)
+
+    def install(self):
+        base_url = "https://api.github.com"
+
+        try:
+            cfg_file = toml.load("./depend.toml")
+        except Exception:
+            log.error("none depend.toml!")
+            sys.exit(1)
+
+        depend_lib = cfg_file["depend"]
+
+        for lib_name in depend_lib:
+            if Path(f"lib/{lib_name}").exists():
+                log.info(f"{lib_name}: {depend_lib[lib_name]}")
+                continue
+
+            log.debug(lib_name)
+            # 获取url
+            lib_url = depend_lib[lib_name]["url"]
+
+            lib_info = get_repo_info(lib_url)
+
+            owner = lib_info["owner"]
+            repo = lib_info["repo"]
+            tag = depend_lib[lib_name]["version"]
+            list_releases = base_url + f"/repos/{owner}/{repo}/releases/tags/{tag}"
+            log.debug(f"list_releases: {list_releases}")
+
+            ret = requests.get(list_releases)
+            try:
+                # print(ret.json()["zipball_url"])
+                release_url = ret.json()["zipball_url"]
+                download_release(release_url, repo)
+            except KeyError:
+                download_repo(lib_url, repo)
+
+    def add(self, url, name, version=None, pack_type="repo"):
+        self.__download(url, name, version, pack_type=pack_type)
+
+    def delete(path: Path):
+        if os.name == "nt":
+            result = subprocess.run(
+                ["rmdir", "/S", "/Q", path],
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            if result.stdout != b"":
+                log.info(result.stdout.decode("GBK"))
+            if result.stderr != b"":
+                log.error(result.stderr.decode("GBK"))
+        elif os.name == "posix":
+            shutil.rmtree(path)
 
 
 class TomlDepend:

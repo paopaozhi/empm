@@ -4,7 +4,9 @@ import subprocess
 import unittest
 from pathlib import Path
 
-from empm.utility import download_repo
+from empm.utility import download_release, download_repo
+
+from .utility.env_manage import auto_clear_env
 
 
 class TestUtility(unittest.TestCase):
@@ -25,6 +27,16 @@ class TestUtility(unittest.TestCase):
 
         ret = os.path.isdir(lib_path)
         self.assertEqual(True, ret)
+
+    @auto_clear_env
+    def test_downloadRelease(self):
+        lib_path = Path("lib/gitmoji")
+        download_release(
+            "https://github.com/carloscuesta/gitmoji", name="gitmoji", version="v3.14.0"
+        )
+
+        ret = os.path.isdir(lib_path)
+        assert ret is True
 
     def test_get_depend(slef):
         pass
