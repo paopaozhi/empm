@@ -11,7 +11,6 @@ from web.main import web_app
 from .utility import (
     Pack,
     TomlDepend,
-    delete_pack,
 )
 
 log = logging.getLogger("rich")
@@ -85,7 +84,7 @@ def remove(pack_name: str):
         pack_toml.delete_depend(pack_name)
         if pack_path.exists():
             log.debug(f"delete {pack_name}")
-            delete_pack(pack_path)
+            Pack.delete(pack_path)
     else:
         log.error("not pack!")
         sys.exit(1)
