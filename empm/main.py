@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 
 import requests
-import toml
 import typer
 import uvicorn
 from typing_extensions import Annotated
@@ -11,6 +10,7 @@ from typing_extensions import Annotated
 from web.main import web_app
 
 from .utility import (
+    Pack,
     TomlDepend,
     delete_pack,
     download_release,
@@ -25,40 +25,28 @@ app = typer.Typer()
 
 @app.command()
 def install():
-    base_url = "https://api.github.com"
+    cfg = TomlDepend()
 
-    try:
-        cfg_file = toml.load("./depend.toml")
-    except Exception:
-        log.error("none depend.toml!")
-        sys.exit(1)
+    depend_lib = cfg.get_depend()
 
-    depend_lib = cfg_file["depend"]
+    log.debug(f"depend_lib: {depend_lib}")
 
-    for lib_name in depend_lib:
-        if Path(f"lib/{lib_name}").exists():
-            log.info(f"{lib_name}: {depend_lib[lib_name]}")
+    for depend in depend_lib:
+        log.debug(f"depend: {type(depend)}")
+        if Path(f"lib/{depend}").exists():
+            log.info(f"{depend}: {depend_lib[depend]}")
             continue
 
-        log.debug(lib_name)
-        # 获取url
-        lib_url = depend_lib[lib_name]["url"]
-
-        lib_info = get_repo_info(lib_url)
-
-        owner = lib_info["owner"]
-        repo = lib_info["repo"]
-        tag = depend_lib[lib_name]["version"]
-        list_releases = base_url + f"/repos/{owner}/{repo}/releases/tags/{tag}"
-        log.debug(f"list_releases: {list_releases}")
-
-        ret = requests.get(list_releases)
         try:
-            # print(ret.json()["zipball_url"])
-            release_url = ret.json()["zipball_url"]
-            download_release(release_url, repo)
+            log.debug(f"version: {depend_lib[depend]['version']}")
+            pack = Pack(
+                depend,
+                depend_lib[depend]["url"],
+                version=depend_lib[depend]["version"],
+            )
         except KeyError:
-            download_repo(lib_url, repo)
+            pack = Pack(depend, depend_lib[depend]["url"])
+        pack.install()
 
 
 @app.command()
