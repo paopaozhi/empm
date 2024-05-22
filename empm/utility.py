@@ -208,7 +208,7 @@ class TomlDepend:
             self._cfg_file = toml.load("depend.toml")
         except Exception:
             log.error("none depend.toml!")
-            sys.exit()
+            sys.exit(1)
 
     def get_depend(self) -> dict:
         return self._cfg_file.get("depend", {})
