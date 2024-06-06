@@ -1,5 +1,4 @@
 import os
-import shutil
 import subprocess
 import unittest
 from pathlib import Path
@@ -28,11 +27,11 @@ class TestCi(unittest.TestCase):
         cfg = """
         [depend]
         gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
-        ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
+        ulog = { url = "https://github.com/rdpoor/ulog" }
         
         [dependencies]
         gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
-        ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
+        ulog = { url = "https://github.com/rdpoor/ulog" }
         """.replace(" ", "")
 
         cfg_class = {}
@@ -47,32 +46,10 @@ class TestCi(unittest.TestCase):
             if cfg_class:
                 toml.dump(cfg_class, fd)
 
-        # clean env, delete file
-        lib_path = Path("lib")
-        lib_dir = os.listdir(lib_path)
-        print(lib_dir)
-
-        if os.name == "nt":
-            for lib in lib_dir:
-                _libpath = Path(lib_path, lib)
-                if _libpath.exists():
-                    log.debug(f"delete {_libpath}")
-                    result = subprocess.run(
-                        ["rmdir", "/S", "/Q", _libpath],
-                        shell=True,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                    )
-                    if result.stdout != b"":
-                        log.info(result.stdout.decode("GBK"))
-                    if result.stderr != b"":
-                        log.error(result.stderr.decode("GBK"))
-        elif os.name == "posix":
-            for lib in lib_dir:
-                shutil.rmtree(lib)
-
         log.info("TestCi Start")
         result = runner.invoke(app, ["install"])
+        print(result.stdout)
+        assert result.exit_code == 0
 
         lib1_path = Path("lib/gitmoji")
         lib2_path = Path("lib/ulog")
@@ -132,11 +109,11 @@ class TestCi(unittest.TestCase):
         cfg = """
         [depend]
         gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
-        ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
+        ulog = { url = "https://github.com/rdpoor/ulog"}
         
         [dependencies]
         gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
-        ulog = { url = "https://github.com/rdpoor/ulog", version = "0.0.1" }
+        ulog = { url = "https://github.com/rdpoor/ulog"}
         """.replace(" ", "")
 
         cfg_class = {}
