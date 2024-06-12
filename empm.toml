@@ -1,0 +1,12 @@
+[package]
+name = "empm"
+version = "0.1.0"
+authors = ["paopaozhi"]
+
+[depend]
+gitmoji = { url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0" }
+ulog = { url = "https://github.com/rdpoor/ulog" }
+
+[dependencies]
+gitmoji = { url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0" }
+ulog = { url = "https://github.com/rdpoor/ulog" }

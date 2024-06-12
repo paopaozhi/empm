@@ -205,10 +205,13 @@ class Pack:
 class TomlDepend:
     def __init__(self) -> None:
         try:
-            self._cfg_file = toml.load("depend.toml")
+            self._cfg_file = toml.load("empm.toml")
         except Exception:
             log.error("none depend.toml!")
             sys.exit(1)
+
+    def info(self):
+        return self._cfg_file.get("package", {})
 
     def get_depend(self) -> dict:
         return self._cfg_file.get("depend", {})
