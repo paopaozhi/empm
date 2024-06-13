@@ -207,7 +207,7 @@ class TomlDepend:
         try:
             self._cfg_file = toml.load("empm.toml")
         except Exception:
-            log.error("none depend.toml!")
+            log.error("none empm.toml!")
             sys.exit(1)
 
     def info(self):
@@ -217,7 +217,7 @@ class TomlDepend:
         return self._cfg_file.get("depend", {})
 
     def set_depend(self, name: str, url: str, version=None):
-        log.info(f"Wire {name} to depend.toml")
+        log.info(f"Wire {name} to empm.toml")
         depend_lib = self.get_depend()
         if version is None:
             depend_lib[name] = {"url": url}

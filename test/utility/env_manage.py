@@ -33,8 +33,8 @@ def _clear_lib_dir():
             elif os.name == "posix":
                 shutil.rmtree(_libpath)
     # init
-    if Path("depend.toml").exists():
-        os.remove("depend.toml")
+    if Path("empm.toml").exists():
+        os.remove("empm.toml")
 
 
 def auto_clear_env(callback):
