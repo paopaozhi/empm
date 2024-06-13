@@ -8,7 +8,7 @@ import {
   Row,
 } from "@douyinfe/semi-ui";
 import { IconGithubLogo, IconMoon, IconSun } from "@douyinfe/semi-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Home.css";
 
 function ListShow({
@@ -90,16 +90,34 @@ function Home() {
 
   const { Header, Content } = Layout;
 
-  const myMap = [
-    ["名称", "模板工程"],
-    ["版本", "0.0.7"],
-    ["作者", "paopaozhi"],
-  ];
+  // const myMap = [
+  //   ["名称", "模板工程"],
+  //   ["版本", "0.0.7"],
+  //   ["作者", "paopaozhi"],
+  // ];
 
-  const pack_info = [
-    { name: "ulog", version: "0.0.1", url: "https://github.com/rdpoor/ulog" },
-    { name: "ulog", version: "0.0.1", url: "https://github.com/rdpoor/ulog" },
-  ];
+  // const pack_info = {
+  //   name: "empm",
+  //   version: "0.1.0",
+  //   authors: ["paopaozhi"],
+  // };
+
+  const [pack_dependencies, setPack_dependencies] = useState([]);
+  const [pack_info, setPack_info] = useState<string | unknown>(0);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/pack/info")
+      .then((repoonse) => repoonse.json())
+      .then((data) => {
+        setPack_info(Object.entries(data));
+      });
+
+    fetch("http://127.0.0.1:5000/pack/dependencies")
+      .then((response) => response.json())
+      .then((data) => {
+        setPack_dependencies(data);
+      });
+  }, []);
 
   return (
     <>
@@ -124,10 +142,10 @@ function Home() {
           </Row>
         </Header>
         <Content style={{ height: 300 }}>
-          <ListShow titleName="基本信息" data={myMap} renderType />
+          <ListShow titleName="基本信息" data={pack_info} renderType />
           <ListShow
             titleName="已安装的包"
-            data={pack_info}
+            data={pack_dependencies}
             renderType={false}
           />
         </Content>

@@ -93,7 +93,9 @@ def remove(pack_name: str):
 @app.command()
 def home():
     try:
-        uvicorn.run(web_app, port=5000, log_level="info")
+        config = uvicorn.Config(web_app, port=5000, log_level="info", reload=True)
+        server = uvicorn.Server(config)
+        server.run()
     except KeyboardInterrupt:
         log.info("exit")
         sys.exit(1)
