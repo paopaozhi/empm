@@ -52,7 +52,7 @@ async def get_pack_dependencies():
                     "version": dependencies[i]["version"],
                 }
             )
-        except:
+        except Exception:
             depend.append({"name": i, "url": dependencies[i]["url"], "version": None})
 
     return depend

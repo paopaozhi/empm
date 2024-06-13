@@ -39,10 +39,10 @@ class TestCi(unittest.TestCase):
 
         log.debug(f"cfg_class: {cfg_class}")
 
-        with open("depend.toml", "w") as fd:
+        with open("empm.toml", "w") as fd:
             fd.write("# Test command install")
             fd.flush()
-        with open("depend.toml", "w") as fd:
+        with open("empm.toml", "w") as fd:
             if cfg_class:
                 toml.dump(cfg_class, fd)
 
@@ -67,7 +67,7 @@ class TestCi(unittest.TestCase):
 
     @env_manage.auto_clear_env
     def test_ci_add(self):
-        with open("depend.toml", "w") as fd:
+        with open("empm.toml", "w") as fd:
             fd.write("# Test command add")
 
         log.info("Test command add")
@@ -85,7 +85,7 @@ class TestCi(unittest.TestCase):
         # assert result.exit_code != 0
         runner.invoke(app, ["add", "ulog", "https://github.com/rdpoor/ulog"])
 
-        cfg = toml.load("depend.toml")
+        cfg = toml.load("empm.toml")
         log.info("test ulog")
         self.assertIn("ulog", cfg["depend"])
         log.info("test gitmoji")
@@ -119,10 +119,10 @@ class TestCi(unittest.TestCase):
         cfg_class = {}
         cfg_class = toml.loads(cfg)
 
-        with open("depend.toml", "w") as fd:
+        with open("empm.toml", "w") as fd:
             fd.write("# Test command remove")
             fd.flush()
-        with open("depend.toml", "w") as fd:
+        with open("empm.toml", "w") as fd:
             if cfg_class:
                 toml.dump(cfg_class, fd)
 
@@ -136,7 +136,7 @@ class TestCi(unittest.TestCase):
 
         ret = pack1_path.exists()
         self.assertEqual(False, ret)
-        cfg = toml.load("depend.toml")
+        cfg = toml.load("empm.toml")
         self.assertNotIn("ulog", cfg["depend"])
 
         result = runner.invoke(app, ["remove", "not-ulog"])
