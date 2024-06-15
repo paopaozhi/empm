@@ -227,13 +227,13 @@ class TomlDepend:
         self._cfg_file["depend"] = depend_lib
         log.debug(f"{name}: {self._cfg_file['depend'][name]}")
 
-        with open(Path("depend.toml"), "w+") as fd:
+        with open(Path("empm.toml"), "w+") as fd:
             d = toml.dump(self._cfg_file, fd)
             log.debug(d)
 
     def delete_depend(self, name: str):
         log.debug(f"Delete {name} from toml")
         self.get_depend().pop(name)
-        with open(Path("depend.toml"), "w+") as fd:
+        with open(Path("empm.toml"), "w+") as fd:
             d = toml.dump(self._cfg_file, fd)
             log.debug(d)
