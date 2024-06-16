@@ -1,6 +1,7 @@
 [project]
+dynamic = ["version"]
+
 name = "empm"
-version = "0.0.8"
 authors = [
   { name = "paopaozhi", email = "paopaozhi@hotmail.com" },
   { name = "hymn", email = "hexinyi136@139.com" },
@@ -18,18 +19,23 @@ classifiers = [
 [project.scripts]
 empm = "empm.main:run"
 
-[build-system]
-# requires = ["setuptools>=61.0"]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project.urls]
 "Homepage" = "https://github.com/paopaozhi/cepack"
 "Bug Tracker" = "https://github.com/paopaozhi/cepack/issues"
 
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [tool.setuptools]
-# ...
 package-dir = { "" = "." }
+
+[tool.setuptools.dynamic]
+version = {attr = "empm.__version__"}
+
+######################################################################################
+# coverage
+#
 
 [tool.coverage.run]
 branch = true
