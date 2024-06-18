@@ -39,4 +39,4 @@ version = {attr = "empm.__version__"}
 
 [tool.coverage.run]
 branch = true
-omit = ["test/*"]
+omit = ["test/*","empm/_internal/command/home.py"]

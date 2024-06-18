@@ -145,7 +145,7 @@ def get_repo_info(url: str) -> dict:
     return c
 
 
-def delete_pack(path: Path):
+def delete_folder(path: Path):
     if os.name == "nt":
         result = subprocess.run(
             ["rmdir", "/S", "/Q", path],
@@ -153,8 +153,6 @@ def delete_pack(path: Path):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        if result.stdout != b"":
-            log.info(result.stdout.decode("GBK"))
         if result.stderr != b"":
             log.error(result.stderr.decode("GBK"))
     elif os.name == "posix":
@@ -187,19 +185,7 @@ class Pack:
         self.__download(url, name, version, pack_type=pack_type)
 
     def delete(path: Path):
-        if os.name == "nt":
-            result = subprocess.run(
-                ["rmdir", "/S", "/Q", path],
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            if result.stdout != b"":
-                log.info(result.stdout.decode("GBK"))
-            if result.stderr != b"":
-                log.error(result.stderr.decode("GBK"))
-        elif os.name == "posix":
-            shutil.rmtree(path)
+        delete_folder(path)
 
 
 class TomlDepend:

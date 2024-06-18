@@ -28,7 +28,4 @@ def install_command():
             )
         except KeyError:
             pack = Pack(depend, depend_lib[depend]["url"])
-        except Exception as e:
-            log.error(f"error: {e}")
-            continue
         pack.install()

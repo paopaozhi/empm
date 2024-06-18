@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 from empm._internal.cli.main import app
 from test.utility import env_manage
 
-from .utility import write_test_toml, init_test_toml
+from .utility import init_test_toml, write_test_toml
 
 runner = CliRunner()
 manage_file = Path("empm.toml")
@@ -44,6 +44,23 @@ def test_cli_install():
 def test_cli_install_load_toml():
     result = runner.invoke(app, ["install"])
     assert result.exit_code != 0
+
+
+def test_cli_install_exist_pack():
+    cfg = """
+    [dependencies]
+    # gitmoji = {url = "https://github.com/carloscuesta/gitmoji", version = "v3.14.0"}
+    ulog = { url = "https://github.com/rdpoor/ulog"}
+    """.replace(" ", "")
+
+    write_test_toml(cfg)
+
+    pack1_path = Path("lib/ulog")
+    os.makedirs(pack1_path, exist_ok=True)
+
+    result = runner.invoke(app, ["install"])
+
+    assert result.exit_code == 0
 
 
 @env_manage.auto_clear_env
@@ -133,8 +150,9 @@ def test_ci_remove():
 
 @env_manage.auto_clear_env
 def test_cli_remove_error():
+    init_test_toml()
     result = runner.invoke(app, ["remove", "ulog"])
-    assert result.exit_code != 0
+    assert result.exit_code == 1
 
 
 @env_manage.auto_clear_env

@@ -2,7 +2,6 @@ import logging
 
 import toml
 
-
 log = logging.getLogger("rich")
 log.setLevel(logging.DEBUG)
 
@@ -22,5 +21,5 @@ def write_test_toml(content: str, manage_file="empm.toml"):
 
 def init_test_toml(manage_file="empm.toml"):
     with open(manage_file, "w") as fd:
-        fd.write("# Test command remove")
+        fd.write("# Test command")
         fd.flush()
