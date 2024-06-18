@@ -214,7 +214,7 @@ class TomlDepend:
         return self._cfg_file.get("package", {})
 
     def get_depend(self) -> dict:
-        return self._cfg_file.get("depend", {})
+        return self._cfg_file.get("dependencies", {})
 
     def set_depend(self, name: str, url: str, version=None):
         log.info(f"Wire {name} to empm.toml")
@@ -224,8 +224,8 @@ class TomlDepend:
         else:
             depend_lib[name] = {"url": url, "version": version}
 
-        self._cfg_file["depend"] = depend_lib
-        log.debug(f"{name}: {self._cfg_file['depend'][name]}")
+        self._cfg_file["dependencies"] = depend_lib
+        log.debug(f"{name}: {self._cfg_file['dependencies'][name]}")
 
         with open(Path("empm.toml"), "w+") as fd:
             d = toml.dump(self._cfg_file, fd)
