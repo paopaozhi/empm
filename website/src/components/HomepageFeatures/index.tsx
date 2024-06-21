@@ -10,32 +10,29 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: '依赖管理',
+    Svg: require('@site/static/img/团队构建应用程序.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        通过 <code>empm.toml</code> 文件管理项目中依赖，这个文件中列出来所需要的依赖包以及他们的版本。
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: '构建依赖包',
+    Svg: require('@site/static/img/小日常.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        通过 <code>empm build</code> 命令构建依赖包，构建后的依赖包会被放在 <code>empm_modules</code> 目录下。
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: '项目模板',
+    Svg: require('@site/static/img/建筑工单.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        通过 <code>empm init</code> 命令初始化项目模板，项目模板中包含了 <code>empm.toml</code> 文件。
       </>
     ),
   },
