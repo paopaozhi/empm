@@ -145,7 +145,7 @@ def get_repo_info(url: str) -> dict:
     return c
 
 
-def delete_pack(path: Path):
+def delete_folder(path: Path):
     if os.name == "nt":
         result = subprocess.run(
             ["rmdir", "/S", "/Q", path],
@@ -153,8 +153,6 @@ def delete_pack(path: Path):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        if result.stdout != b"":
-            log.info(result.stdout.decode("GBK"))
         if result.stderr != b"":
             log.error(result.stderr.decode("GBK"))
     elif os.name == "posix":
@@ -187,19 +185,7 @@ class Pack:
         self.__download(url, name, version, pack_type=pack_type)
 
     def delete(path: Path):
-        if os.name == "nt":
-            result = subprocess.run(
-                ["rmdir", "/S", "/Q", path],
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            if result.stdout != b"":
-                log.info(result.stdout.decode("GBK"))
-            if result.stderr != b"":
-                log.error(result.stderr.decode("GBK"))
-        elif os.name == "posix":
-            shutil.rmtree(path)
+        delete_folder(path)
 
 
 class TomlDepend:
@@ -214,7 +200,7 @@ class TomlDepend:
         return self._cfg_file.get("package", {})
 
     def get_depend(self) -> dict:
-        return self._cfg_file.get("depend", {})
+        return self._cfg_file.get("dependencies", {})
 
     def set_depend(self, name: str, url: str, version=None):
         log.info(f"Wire {name} to empm.toml")
@@ -224,8 +210,8 @@ class TomlDepend:
         else:
             depend_lib[name] = {"url": url, "version": version}
 
-        self._cfg_file["depend"] = depend_lib
-        log.debug(f"{name}: {self._cfg_file['depend'][name]}")
+        self._cfg_file["dependencies"] = depend_lib
+        log.debug(f"{name}: {self._cfg_file['dependencies'][name]}")
 
         with open(Path("empm.toml"), "w+") as fd:
             d = toml.dump(self._cfg_file, fd)

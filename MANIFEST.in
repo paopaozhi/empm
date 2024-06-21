@@ -2,3 +2,4 @@ include LICENSE.md
 graft web/html/dist
 
 prune web/html/dist/node_modules
+prune website

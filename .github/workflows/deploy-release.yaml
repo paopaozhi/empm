@@ -16,6 +16,10 @@ jobs:
           python-version: '3.9'
       - name: Install dependencies
         run: pip install -U build
+      - name: Build react
+        run: |
+          cd empm/_internal/web/html && yarn
+          yarn build
       - name: Build package
         run: python -m build
       - name: Publish to PyPI

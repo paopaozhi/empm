@@ -22,13 +22,14 @@ web_app.add_middleware(
     allow_headers=["*"],
 )
 
+base_path = Path(Path(__file__).parent, "html/dist")
 
-web_app.mount("/assets", StaticFiles(directory="web/html/dist/assets"), name="assets")
+web_app.mount("/assets", StaticFiles(directory=f"{base_path}/assets"), name="assets")
 
 
 @web_app.get("/")
 async def root():
-    html_path = Path("web/html/dist/index.html")
+    html_path = Path(base_path, "index.html")
     return FileResponse(html_path)
 
 
