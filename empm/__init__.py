@@ -2,7 +2,7 @@ import logging
 
 from rich.logging import RichHandler
 
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 
 FORMAT = "%(message)s"
 logging.basicConfig(format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
