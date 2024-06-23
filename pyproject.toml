@@ -17,7 +17,7 @@ classifiers = [
 ]
 
 [project.scripts]
-empm = "empm.main:run"
+empm = "empm._internal.cli.main:app"
 
 [project.urls]
 "Homepage" = "https://github.com/paopaozhi/cepack"
