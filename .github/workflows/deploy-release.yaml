@@ -18,7 +18,7 @@ jobs:
         run: pip install -U build
       - name: Build react
         run: |
-          cd empm/_internal/web/html && yarn
+          cd empm/_internal/web/frontend && yarn
           yarn build
       - name: Build package
         run: python -m build
