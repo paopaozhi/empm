@@ -22,7 +22,7 @@ web_app.add_middleware(
     allow_headers=["*"],
 )
 
-base_path = Path(Path(__file__).parent, "html/dist")
+base_path = Path(Path(__file__).parent, "frontend/dist")
 
 web_app.mount("/assets", StaticFiles(directory=f"{base_path}/assets"), name="assets")
 

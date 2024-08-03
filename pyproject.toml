@@ -29,6 +29,10 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = { "" = "." }
+include-package-data = true
+
+[tool.setuptools.package-data]
+"empm._internal.web.frontend.dist" = ["**"]
 
 [tool.setuptools.dynamic]
 version = {attr = "empm.__version__"}
