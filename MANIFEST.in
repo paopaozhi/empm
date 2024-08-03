@@ -1,5 +1,5 @@
 include LICENSE.md
-graft web/html/dist
+graft empm/_internal/web/frontend/dist
 
-prune web/html/dist/node_modules
+prune empm/_internal/web/frontend/node_modules
 prune website
