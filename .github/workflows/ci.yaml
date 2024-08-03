@@ -28,7 +28,7 @@ jobs:
           node-version: "20.x"
       - name: Build React
         run: |
-          cd empm/_internal/web/html && yarn
+          cd empm/_internal/web/frontend && yarn
           yarn build
       - name: Run tests
         run: |
@@ -53,7 +53,7 @@ jobs:
       - name: Lint with Ruff
         run: |
           pip install ruff
-          ruff --output-format=github .
+          ruff check --output-format=github .
 
   # package:
   #   runs-on: ubuntu-latest
