@@ -2,9 +2,10 @@ import typer
 from typing_extensions import Annotated
 
 from empm._internal.command.add import add_command
-from empm._internal.command.install import install_command
-from empm._internal.command.remove import remove_command
 from empm._internal.command.home import home_command
+from empm._internal.command.install import install_command
+from empm._internal.command.new import new_command
+from empm._internal.command.remove import remove_command
 
 app = typer.Typer()
 
@@ -33,6 +34,11 @@ def add(
 @app.command(help="remove a dependency from toml file")
 def remove(pack_name: str):
     remove_command(pack_name)
+
+
+@app.command(help="new project")
+def new(project_name: Annotated[str, typer.Argument(help="project name")]):
+    new_command(project_name)
 
 
 @app.command(help="web GUI")
