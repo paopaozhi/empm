@@ -82,39 +82,6 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Github issues',
-              href: 'https://github.com/paopaozhi/empm/issues',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/paopaozhi/empm',
-            },
-          ],
-        },
-      ],
       copyright: `Copyright © ${new Date().getFullYear()} paopaozhi, Inc. Built with Docusaurus.`,
     },
     prism: {
