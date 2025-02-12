@@ -5,6 +5,7 @@ from empm._internal.command.add import add_command
 from empm._internal.command.home import home_command
 from empm._internal.command.install import install_command
 from empm._internal.command.new import new_command
+from empm._internal.command.push import push_sdk_latest
 from empm._internal.command.remove import remove_command
 
 app = typer.Typer()
@@ -44,3 +45,11 @@ def new(project_name: Annotated[str, typer.Argument(help="project name")]):
 @app.command(help="web GUI")
 def home():
     home_command()
+
+
+@app.command(help="push pack")
+def push(push_type: Annotated[str, typer.Option(help="pack type")]):
+    if push_type == "sdk":
+        push_sdk_latest()
+    elif push_type == "lib":
+        pass
