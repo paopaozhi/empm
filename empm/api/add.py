@@ -4,7 +4,7 @@ import sys
 import typer
 from typing_extensions import Annotated
 
-from empm.utility import Pack, TomlDepend
+from ..utility import Pack, TomlDepend
 
 log = logging.getLogger("rich")
 

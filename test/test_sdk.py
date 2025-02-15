@@ -1,4 +1,4 @@
-from empm._internal.command.push import push_sdk, pull_sdk
+from empm.api.push import push_sdk, pull_sdk
 from pathlib import Path
 
 def test_push_sdk():

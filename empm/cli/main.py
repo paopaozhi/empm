@@ -2,12 +2,12 @@ import typer
 from typing_extensions import Annotated, Optional
 import logging
 
-from empm._internal.command.add import add_command
-from empm._internal.command.home import home_command
-from empm._internal.command.install import install_command
-from empm._internal.command.new import new_command
-from empm._internal.command.push import push_sdk_latest, pull_sdk
-from empm._internal.command.remove import remove_command
+from ..api.add import add_command
+from ..api.home import home_command
+from ..api.install import install_command
+from ..api.new import new_command
+from ..api.push import push_sdk_latest, pull_sdk
+from ..api.remove import remove_command
 
 app = typer.Typer()
 log = logging.getLogger('rich')

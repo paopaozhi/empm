@@ -3,8 +3,7 @@ import sys
 
 import uvicorn
 
-from empm._internal.web.main import web_app
-
+from ..web.main import web_app
 
 log = logging.getLogger("rich")
 

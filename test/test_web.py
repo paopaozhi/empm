@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from empm._internal.web.main import web_app
+from empm.web.main import web_app
 from test.utility import env_manage
 
 from .utility import write_test_toml

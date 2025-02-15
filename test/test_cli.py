@@ -6,7 +6,7 @@ from pathlib import Path
 import toml
 from typer.testing import CliRunner
 
-from empm._internal.cli.main import app
+from empm.cli.main import app
 from test.utility import env_manage
 
 from .utility import init_test_toml, log, write_test_toml
