@@ -1,3 +1,5 @@
+import sys
+
 import typer
 from typing_extensions import Annotated, Optional
 import logging
@@ -61,3 +63,10 @@ def push(push_type: Annotated[str, typer.Option(help="pack type")]):
         push_sdk_latest()
     elif push_type == "lib":
         pass
+
+
+def cli_main():
+    if len(sys.argv) == 1:
+        print("usage: python -m empm")
+    else:
+        app()

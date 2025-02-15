@@ -1,8 +1,3 @@
-import sys
+from .cli.main import cli_main
 
-if len(sys.argv) == 1:
-    print("usage: python -m empm")
-else:
-    from .cli.main import app
-
-    app()
+cli_main()
