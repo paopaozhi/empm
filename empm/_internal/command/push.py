@@ -157,7 +157,6 @@ def push_lib_latest(name: str, version: str, lib_dir_path: Path = None):
     log.info("Push lib {name} {version} OK.")
 
 
-
 if __name__ == "__main__":
     import empm
 

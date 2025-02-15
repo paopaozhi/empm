@@ -1,14 +1,16 @@
 import typer
-from typing_extensions import Annotated
+from typing_extensions import Annotated, Optional
+import logging
 
 from empm._internal.command.add import add_command
 from empm._internal.command.home import home_command
 from empm._internal.command.install import install_command
 from empm._internal.command.new import new_command
-from empm._internal.command.push import push_sdk_latest
+from empm._internal.command.push import push_sdk_latest, pull_sdk
 from empm._internal.command.remove import remove_command
 
 app = typer.Typer()
+log = logging.getLogger('rich')
 
 
 @app.command(
@@ -22,14 +24,20 @@ def install():
     help="add a new dependency to toml file",
 )
 def add(
-    pack_name: str,
-    pack_url: str,
-    pack_type: Annotated[
-        bool, typer.Option(help="True: download release False: download repo")
-    ] = False,
-    pack_version: Annotated[str, typer.Option(help="pack version")] = None,
+        pack_name: str,
+        pack_url: Annotated[str, typer.Argument(help="pack url")] = None,
+        pack_version: Annotated[str, typer.Argument(help="pack version")] = None,
+        pack_type: Annotated[
+            bool, typer.Option(help="True: download release False: download repo")
+        ] = False,
+        install_type: Annotated[str, typer.Option(help="install sdk or library")] = "lib"
 ):
-    add_command(pack_name, pack_url, pack_type, pack_version)
+    if install_type == "lib":
+        add_command(pack_name, pack_url, pack_type, pack_version)
+    elif install_type == "sdk":
+        pull_sdk(pack_name, pack_version)
+    else:
+        log.error("Unknown install type")
 
 
 @app.command(help="remove a dependency from toml file")
