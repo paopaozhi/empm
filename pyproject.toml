@@ -7,6 +7,10 @@ authors = [
 description = "embedded pack manage"
 readme = "README.md"
 requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
 license = "Apache-2.0"
 dependencies = [
     "typer>=0.12.3",
@@ -20,19 +24,23 @@ dependencies = [
 dynamic = ["version"]
 
 [project.scripts]
-empm = "empm._internal.cli.main:app"
+empm = "empm.cli.main:app"
 
 [project.urls]
 "Homepage" = "https://github.com/paopaozhi/cepack"
 "Bug Tracker" = "https://github.com/paopaozhi/cepack/issues"
 
-[[tool.uv.index]]
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
-default = true
-
 [build-system]
 requires = ["hatchling>=1.22"]
 build-backend = "hatchling.build"
+
+######################################################################################
+# uv
+#
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
 
 ######################################################################################
 # hatch
@@ -41,19 +49,19 @@ build-backend = "hatchling.build"
 [tool.hatch.build]
 # 将前端产物标记为构建产物（不在 VCS 里也会被打进包）
 artifacts = [
-  "empm/_internal/web/frontend/dist/**",
+  "src/empm/web/frontend/dist/**",
 ]
 
 [tool.hatch.build.targets.wheel]
 # 明确打包 empm 包目录（含其下的前端产物）
-packages = ["empm"]
+packages = ["src/empm"]
 
 # 为源码构建注册钩子
 [tool.hatch.build.targets.sdist.hooks.custom]
 path = "tools/frontend_build.py"
 
 [tool.hatch.version]
-path = "empm/__init__.py"
+path = "src/empm/__init__.py"
 
 ######################################################################################
 # coverage

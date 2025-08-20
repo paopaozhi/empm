@@ -1,11 +1,11 @@
 import typer
 from typing_extensions import Annotated
 
-from empm._internal.command.add import add_command
-from empm._internal.command.home import home_command
-from empm._internal.command.install import install_command
-from empm._internal.command.new import new_command
-from empm._internal.command.remove import remove_command
+from empm.command.add import add_command
+from empm.command.home import home_command
+from empm.command.install import install_command
+from empm.command.new import new_command
+from empm.command.remove import remove_command
 
 app = typer.Typer()
 

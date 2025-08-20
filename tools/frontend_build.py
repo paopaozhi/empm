@@ -18,7 +18,7 @@ class CustomBuildHook(BuildHookInterface):
         if os.environ.get("EMPM_SKIP_FRONTEND_BUILD") == "1":
             return
 
-        root = Path(self.root)
+        root = Path(self.root) / "src"
 
         # 如果是从 sdist 解包目录构建（根目录含 PKG-INFO），跳过二次前端构建
         if (root / "PKG-INFO").exists():
@@ -27,7 +27,7 @@ class CustomBuildHook(BuildHookInterface):
             )
             return
 
-        fe_dir = root / "empm" / "_internal" / "web" / "frontend"
+        fe_dir = root / "empm" / "web" / "frontend"
         if not (fe_dir / "package.json").exists():
             return
 
