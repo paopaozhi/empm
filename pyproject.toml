@@ -1,20 +1,23 @@
 [project]
-dynamic = ["version"]
-
 name = "empm"
 authors = [
   { name = "paopaozhi", email = "paopaozhi@hotmail.com" },
   { name = "hymn", email = "hexinyi136@139.com" },
 ]
-dependencies = ["typer", "toml", "requests", "fastapi"]
 description = "embedded pack manage"
 readme = "README.md"
-requires-python = ">=3.9"
-classifiers = [
-  "Programming Language :: Python :: 3.9",
-  "License :: OSI Approved :: Apache Software License",
-  "Operating System :: OS Independent",
+requires-python = ">=3.11"
+license = "Apache-2.0"
+dependencies = [
+    "typer>=0.12.3",
+    "toml==0.10.2",
+    "requests>=2.31.0",
+    "fastapi>=0.111.0",
+    "rich>=13.7.1",
+    "typing-extensions>=4.11.0",
+    "uvicorn>=0.29.0",
 ]
+dynamic = ["version"]
 
 [project.scripts]
 empm = "empm._internal.cli.main:app"
@@ -23,19 +26,34 @@ empm = "empm._internal.cli.main:app"
 "Homepage" = "https://github.com/paopaozhi/cepack"
 "Bug Tracker" = "https://github.com/paopaozhi/cepack/issues"
 
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.22"]
+build-backend = "hatchling.build"
 
-[tool.setuptools]
-package-dir = { "" = "." }
-include-package-data = true
+######################################################################################
+# hatch
+#
 
-[tool.setuptools.package-data]
-"empm._internal.web.frontend.dist" = ["**"]
+[tool.hatch.build]
+# 将前端产物标记为构建产物（不在 VCS 里也会被打进包）
+artifacts = [
+  "empm/_internal/web/frontend/dist/**",
+]
 
-[tool.setuptools.dynamic]
-version = {attr = "empm.__version__"}
+[tool.hatch.build.targets.wheel]
+# 明确打包 empm 包目录（含其下的前端产物）
+packages = ["empm"]
+
+# 为源码构建注册钩子
+[tool.hatch.build.targets.sdist.hooks.custom]
+path = "tools/frontend_build.py"
+
+[tool.hatch.version]
+path = "empm/__init__.py"
 
 ######################################################################################
 # coverage
@@ -44,3 +62,9 @@ version = {attr = "empm.__version__"}
 [tool.coverage.run]
 branch = true
 omit = ["test/*","empm/_internal/command/home.py"]
+
+[dependency-groups]
+dev = [
+    "hatch>=1.14.1",
+    "pytest>=8.4.1",
+]
